@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { Feather, MaterialIcons } from '@expo/vector-icons';
+import { Feather, MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
-export default function AllServicesScreen({ navigation }) {
+export default function AllServicesScreen(props) {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -15,7 +18,7 @@ export default function AllServicesScreen({ navigation }) {
         {/* Services Section */}
         <Text style={styles.sectionTitle}>Services</Text>
         <View style={styles.servicesGrid}>
-          <TouchableOpacity style={styles.serviceItem}>
+          <TouchableOpacity style={styles.serviceItem} onPress={() => navigation.navigate('Ticket')}>
             <View style={styles.iconBox}><Feather name="file-text" size={28} color="#1a237e" /></View>
             <Text style={styles.serviceText}>Send Ticket</Text>
           </TouchableOpacity>
@@ -45,9 +48,20 @@ export default function AllServicesScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      {/* Bottom Navigation Placeholder */}
-      <View style={styles.bottomNavPlaceholder}>
-        <Text style={{ color: '#222' }}>[ Bottom Navigation ]</Text>
+      {/* Bottom Navigation Tab Bar */}
+      <View style={styles.tabBar}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Dashboard')}>
+          <Ionicons name="home" size={24} color="#222" />
+          <Text style={styles.tabLabel}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('AllServices')}>
+          <Ionicons name="grid" size={24} color="#1a237e" />
+          <Text style={[styles.tabLabel, { color: '#1a237e' }]}>All Services</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Account')}>
+          <Ionicons name="person" size={24} color="#222" />
+          <Text style={styles.tabLabel}>Account</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -103,16 +117,27 @@ const styles = StyleSheet.create({
     color: '#222',
     textAlign: 'center',
   },
-  bottomNavPlaceholder: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+  tabBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
     height: 60,
-    backgroundColor: '#fafafa',
+    backgroundColor: '#fff',
     borderTopWidth: 1,
     borderTopColor: '#eee',
-    justifyContent: 'center',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  tabItem: {
+    flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabLabel: {
+    fontSize: 12,
+    color: '#222',
+    marginTop: 2,
   },
 }); 
