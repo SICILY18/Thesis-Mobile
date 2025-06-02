@@ -1,15 +1,70 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function LoginScreen() {
+  const navigation = useNavigation();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    console.log('Login button clicked');
+    console.log('Attempting login for username:', username);
+    // Replace with your backend API endpoint URL
+    const apiUrl = 'http://192.168.100.34:3000/api/login';
+
+    try {
+      console.log('Sending login request to:', apiUrl);
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Login successful
+        console.log('Login successful:', data);
+        // You might want to store the token (data.token) using AsyncStorage
+        navigation.replace('Dashboard');
+      } else {
+        // Login failed
+        console.error('Login failed:', data.message);
+        Alert.alert('Login Failed', data.message || 'Invalid credentials');
+      }
+    } catch (error) {
+      console.error('Fetch request failed:', error);
+      console.error('Error during login:', error);
+      Alert.alert('Error', 'An error occurred during login. Please try again.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image source={require('./assets/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Login</Text>
       <Text style={styles.label}>Username</Text>
-      <TextInput style={styles.input} placeholder="Enter your username" />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your username"
+        value={username}
+        onChangeText={setUsername}
+        autoCapitalize="none"
+      />
       <Text style={styles.label}>Password</Text>
-      <TextInput style={styles.input} placeholder="Enter your password" secureTextEntry />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your password"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
       <View style={styles.row}>
         <View style={styles.checkboxRow}>
           <View style={styles.checkbox} />
@@ -19,7 +74,7 @@ export default function LoginScreen() {
           <Text style={styles.forgot}>forgot password?</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.loginButton}>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Log in</Text>
       </TouchableOpacity>
     </View>
