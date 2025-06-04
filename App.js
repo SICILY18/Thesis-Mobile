@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -9,6 +10,9 @@ import LoginScreen from './LoginScreen';
 import DashboardScreen from './DashboardScreen';
 import AllServicesScreen from './AllServicesScreen';
 import TicketScreen from './TicketScreen';
+import AccountScreen from './AccountScreen';
+import UpdateProfileScreen from './UpdateProfileScreen';
+import ChangePasswordScreen from './ChangePasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -44,6 +48,21 @@ export default function App() {
         <Stack.Screen
           name="Ticket"
           component={TicketScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Account"
+          component={AccountScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="UpdateProfile"
+          component={UpdateProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChangePasswordScreen"
+          component={ChangePasswordScreen}
           options={{ headerShown: false }}
         />
         {/* Add other screens here */}
