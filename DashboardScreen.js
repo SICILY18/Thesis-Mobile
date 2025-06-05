@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons, AntDesign, Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -35,18 +35,27 @@ export default function DashboardScreen() {
   const navigation = useNavigation();
   const [userData, setUserData] = useState(null);
 
-  useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        const storedUserData = await AsyncStorage.getItem('userData');
-        if (storedUserData) {
-          setUserData(JSON.parse(storedUserData));
-        }
-      } catch (error) {
-        console.error('Error loading user data:', error);
+  const loadUserData = async () => {
+    try {
+      const storedUserData = await AsyncStorage.getItem('userData');
+      if (storedUserData) {
+        setUserData(JSON.parse(storedUserData));
       }
-    };
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    }
+  };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      loadUserData();
+      return () => {
+        // Optional: any cleanup actions when the screen goes out of focus
+      };
+    }, [])
+  );
+
+  useEffect(() => {
     loadUserData();
   }, []);
 
@@ -120,7 +129,12 @@ export default function DashboardScreen() {
       <ScrollView style={styles.scrollView}>
         <View style={styles.userHeader}>
           <View style={styles.userInfo}>
-            <Image source={require('./assets/logo.png')} style={styles.userAvatar} />
+            <Image 
+              source={userData?.profile_picture ? 
+                {uri: `http://172.16.109.33:3000/api/customers/${userData.id}/profile-picture?t=${new Date().getTime()}`} : 
+                require('./assets/logo.png')} 
+              style={styles.userAvatar} 
+            />
             <Text style={styles.userName}>Hello, {userData ? userData.username : 'User'}!</Text>
           </View>
           <View style={styles.dropdown}>

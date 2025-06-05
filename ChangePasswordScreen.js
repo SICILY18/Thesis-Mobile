@@ -60,7 +60,7 @@ export default function ChangePasswordScreen() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`http://192.168.1.4:3000/api/customers/${userData.id}/password`, {
+      const response = await fetch(`http://172.16.109.33:3000/api/customers/${userData.id}/password`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ currentPassword, newPassword }),

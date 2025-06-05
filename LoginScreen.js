@@ -20,7 +20,7 @@ export default function LoginScreen() {
 
     try {
       console.log('Sending request to server...');
-      const response = await fetch('http://192.168.1.4:3000/api/login', {
+      const response = await fetch('http://172.16.109.33:3000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

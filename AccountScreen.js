@@ -78,7 +78,9 @@ export default function AccountScreen() {
               ) : (
                 <>
                   <Image
-                    source={require('./assets/logo.png')} // Using default logo, actual profile pic logic was tied to upload
+                    source={userData?.profile_picture ? 
+                      {uri: `http://172.16.109.33:3000/api/customers/${userData.id}/profile-picture?t=${new Date().getTime()}`} : 
+                      require('./assets/logo.png')}
                     style={styles.profileImage}
                     resizeMode="contain"
                   />

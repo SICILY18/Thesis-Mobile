@@ -64,7 +64,7 @@ export default function UpdateProfileScreen() {
         if (parsedData.profile_picture) {
              // The backend stores profile_picture as BYTEA, so we need to construct the URL
              // to fetch it via the /api/customers/:id/profile-picture GET endpoint
-            setProfileImageUri(`http://192.168.1.4:3000/api/customers/${parsedData.id}/profile-picture?t=${new Date().getTime()}`);
+            setProfileImageUri(`http://172.16.109.33:3000/api/customers/${parsedData.id}/profile-picture?t=${new Date().getTime()}`);
         }
       }
     } catch (error) {
@@ -90,7 +90,7 @@ export default function UpdateProfileScreen() {
         phone_number: userData.phone_number, // Preserve existing phone number
       };
 
-      const profileUpdateResponse = await fetch(`http://192.168.1.4:3000/api/customers/${userData.id}`, {
+      const profileUpdateResponse = await fetch(`http://172.16.109.33:3000/api/customers/${userData.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(profilePayload),
@@ -152,7 +152,7 @@ export default function UpdateProfileScreen() {
 
     try {
       setIsLoading(true); // Indicate loading for image upload
-      const response = await fetch(`http://192.168.1.4:3000/api/customers/${userId}/profile-picture`, {
+      const response = await fetch(`http://172.16.109.33:3000/api/customers/${userId}/profile-picture`, {
         method: 'POST',
         body: formData,
         headers: {
@@ -169,7 +169,7 @@ export default function UpdateProfileScreen() {
             await AsyncStorage.setItem('userData', JSON.stringify(updatedUser));
             setUserData(updatedUser);
              // Force refresh of image by appending a timestamp
-            setProfileImageUri(`http://192.168.1.4:3000/api/customers/${userId}/profile-picture?t=${new Date().getTime()}`);
+            setProfileImageUri(`http://172.16.109.33:3000/api/customers/${userId}/profile-picture?t=${new Date().getTime()}`);
         }
       } else {
         throw new Error(responseData.message || 'Failed to upload image.');
@@ -194,7 +194,7 @@ export default function UpdateProfileScreen() {
       <ScrollView contentContainerStyle={styles.scrollContentContainer}>
         <View style={styles.profileImageContainer}>
         <Image
-          source={profileImageUri ? { uri: profileImageUri } : (userData?.profile_picture ? {uri: `http://192.168.1.4:3000/api/customers/${userData.id}/profile-picture?t=${new Date().getTime()}`} : require('./assets/logo.png'))}
+          source={profileImageUri ? { uri: profileImageUri } : (userData?.profile_picture ? {uri: `http://172.16.109.33:3000/api/customers/${userData.id}/profile-picture?t=${new Date().getTime()}`} : require('./assets/logo.png'))}
           style={styles.profileImage}
         />
         <TouchableOpacity style={styles.cameraButton} onPress={handleImagePick}>
